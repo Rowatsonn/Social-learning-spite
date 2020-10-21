@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<body>
+   <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="text-center" style="font-size: 53px;">Part One</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+   <div class = "row">
+      <div class = "col-md-12 text center">
+         <div>
+            <h1 id = "Waiting" style = "display:none;">Waiting for your partner...</h1>
+            <h1 id = "headerone">Please select how much "lab money" you would like to donate to the shared pot</h1>
+            <h1 id = "headertwo" style = "display:none;">0</h1>
+         </div>
+      </div>
+   </div>
+   <div class = "row" id = "PGGrow">
+      <div class = "col-md-12 text-center">
+         <div class="slidecontainer">
+            <label for = "Donation">Donation:</label>
+               <input type="text" class="js-range-slider" name="my_range" value=""
+        	data-min="0"
+        	data-max="10"
+        	data-from="5"
+         />
+         </div>
+      </div>
+   </div>
+   <div class = "row">
+      <div class = "col-md-3">
+          <button onClick = "console.log($slider.prop('value'))" class="btn btn-success btn-lg" type="button" id="submission">Submit Choice</button>
+      </div>
+   </div>
+</body>
+{% endblock %}
+{% block scripts %}
+    <script>
+        createAgent();
+        var $slider = $(".js-range-slider");
+        $(".js-range-slider").ionRangeSlider({
+        skin: "big"});
+    </script>
+{% endblock %}
