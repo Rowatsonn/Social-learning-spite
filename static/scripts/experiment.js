@@ -26,6 +26,7 @@ function createAgent () {
     store.set("my_node_id", my_node_id);
     my_network_id = resp.node.network_id;
     dallinger.storage.set("my_network_id", my_network_id);
+    numTransmissions = 0 // Set to 0. Once its 5, move on.
   })
   .fail(function (rejection) {
     dallinger.allowExit();
@@ -37,14 +38,21 @@ function createAgent () {
 function submitResponse(response, type) {
   dallinger.createInfo(my_node_id, {
     contents: response,
-    info_type: type,
-    details: JSON.stringify(question_json)
+    info_type: type
   }).done(function(resp) {
-    console.log("Info made")
+    hideExperiment();
     checkTransmit();
   }).fail(function (rejection) {
     go_to_questionnaire();
   });
+}
+
+function hideExperiment(){
+  // Hide the experiment
+  $("#headerone").hide();
+  $("#Waiting").show();
+  $("#PGGrow").hide();
+  $("#Submitbutton").hide(); 
 }
 
 function checkTransmit (){
@@ -54,8 +62,8 @@ function checkTransmit (){
   }) 
   .done(function (resp){
     transmissions = resp.transmissions;
-    if (transmissions.length == 1){
-      processTransmit(transmissions[0].info_id)
+    if (transmissions.length == 3){
+      processTransmit(transmissions)
     } else {
       setTimeout(function(){
         checkTransmit();
@@ -64,10 +72,34 @@ function checkTransmit (){
   })
 }
 
-function processTransmit(ID){
-  // If it finds a transmission from the POG
-  dallinger.getInfo(my_node_id, ID)
-  .done(function(resp){
-    console.log("Score will be displayed")
-  })
+function processTransmit(transmissions){
+  // Extract the needed info
+  numTransmissions = numTransmissions + 1;
+  potID = transmissions[0].info_id;
+  donID = transmissions[1].info_id;
+  leftoverID = transmissions[2].info_id;
+  dallinger.getInfo(my_node_id, potID)
+    .done(function(resp) {
+        pot = resp.info.contents;
+    })
+  dallinger.getInfo(my_node_id, donID)
+    .done(function(resp) {
+        donation = resp.info.contents; 
+    })
+  dallinger.getInfo(my_node_id, leftoverID)
+    .done(function(resp) {
+        leftovers = resp.info.contents; 
+    })
+  setTimeout(function(){ // Wait 2 seconds to allow the above functions to run
+    showResults(pot, donation, leftovers)
+  }, 2000)
+}
+
+function showResults(pot, donation, leftovers){
+  // Display the results
+  $("#Waiting").hide();
+  $("#partner").html("This round your partner donated: " + donation);
+  $("#partner").show();
+  $("#earnings").html("This round, your total earnings were: " + (parseInt(pot) + parseInt(leftovers)))
+  $("#earnings").show();
 }

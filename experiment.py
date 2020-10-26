@@ -17,6 +17,10 @@ class Spite(Experiment):
         self.models = models
         self.experiment_repeats = 1 # How many networks?
         self.initial_recruitment_size = 1 # How many participants? (note, it is always 1 per group)
+        self.known_classes = {
+            "Donation": models.Donation,
+            "Destroy": models.Destroy,
+        }
 
         if session:
             self.setup()
@@ -33,9 +37,13 @@ class Spite(Experiment):
         """Return a new network."""
         return FullyConnected(max_size=2) # 1 Pog, 1 Participant
 
-    def add_node_to_network(self, node, network):
-        """Add node to the chain and receive transmissions."""
-        network.add_node(node)
+    def create_node(self, participant, network):
+        """Create a Probe for the participant"""
+        node = self.models.Probe(network=network, participant=participant)
+        node.property1 = json.dumps({
+            'score_in_pgg' : 0
+        })
+        return node
 
     def recruit(self):
         """Recruit one participant at a time until all networks are full."""
@@ -47,9 +55,13 @@ class Spite(Experiment):
     def info_post_request(self, node, info):
         """Depending on the info type, different things will happen here."""
 
+        pog = node.network.nodes(type=self.models.Pogtwo)[0] # Define the pog
+
         if node.failed:
             raise ValueError("Node {} is failed, it should not be making infos".format(node.id))
 
-        if info(type=self.models.Donation):
-            node.transmit(what = info, to_whom = self.models.PogTwo) # Send it to the POG
+        if info.type == "Donation":
+            node.transmit(what = info, to_whom = self.models.Pogtwo)[0] # Send it to the POG
+            pog.receive() # Pog can receive the transmission
+            
 
