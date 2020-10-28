@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="container">
+   <div class="row">
+      <div class="col-md-12 text-center">
+         <h1 style="font-size: 53px;">Part Two</h1>
+      </div>
+   </div>
+   <div class = "row"> 
+      <div class = "col-md-12 text-center"> 
+         <h1 id = "Socialinfo">Waiting for other group mates to make their decisions....</h1>
+         <h1 id = "Whatdo" style = "display:none;">Placeholder</h1>
+      </div>
+   </div>
+</div>
+<div class = "container" id = "spitecont" style = "display:none;"> 
+   <div class = "row">
+      <div class = "col-md-12 text-center">
+         <h3>Will you reduce your new partner's earnings?</h3>
+      </div>
+   </div>
+   <div class = "row">
+      <div class = "col-md-12 text-center">
+         <img src="../static/images/Outline.png" style="width:150px;height:200px;"> 
+         <h4 id = "Score">Placeholder</h4>
+         <h4 id = "YourScore">Placeholder<
+      </div>
+   </div>
+   <div class = "row">
+      <div class = "col-md-3 text-center">
+         <button onClick = "submitResponse('Yes', 'Choice')" class = "btn btn-lg btn-success" type = "button">Yes</button></div>
+      <div class = "col-md-6"></div>
+      <div class = "col-md-3 text-center">
+         <button onClick = "submitResponse('No', 'Choice')" class = "btn btn-lg btn-success" type = "button">No</button></div>
+   </div>
+</div>
+<div class = "container" id = "OK" style = "display:none;">
+  <div class = "row">
+     <div class = "col-md-3">
+        <button onClick = "advanceSpite();" class = "btn btn-lg btn-success" type = "button">Okay</button>
+     </div>
+   </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+       condition = dallinger.storage.get("Condition");
+       setTimeout(function(){
+          startSpite(condition)
+       }, 10000)
+    </script>
+{% endblock %}

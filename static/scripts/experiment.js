@@ -1,32 +1,14 @@
-$(document).ready(function() {
-
-  // do not allow user to close or reload
-  dallinger.preventExit = true;
-
-  // Consent to the experiment.
-  $("#consent").click(function() {
-    store.set("recruiter", dallinger.getUrlParameter("recruiter"));
-    store.set("hit_id", dallinger.getUrlParameter("hit_id"));
-    store.set("worker_id", dallinger.getUrlParameter("worker_id"));
-    store.set("assignment_id", dallinger.getUrlParameter("assignment_id"));
-    store.set("mode", dallinger.getUrlParameter("mode"));
-
-    dallinger.allowExit();
-    dallinger.goToPage('instructions/quiz_instructions');
-  });
-});
-
 // Create the agent. Runs when the page opens.
 function createAgent () {
   // Setup participant and get node id
   dallinger.createAgent()
   .done(function (resp) {
-    // Sets node ID and network ID to a cookie. May or may not be needed. 
     my_node_id = resp.node.id;
     store.set("my_node_id", my_node_id);
     my_network_id = resp.node.network_id;
     dallinger.storage.set("my_network_id", my_network_id);
-    numTransmissions = 0 // Set to 0. Once its 5, move on.
+    numTransmissions = 0; // Set to 0. Once its 5, move on.
+    Score = 0; // Updated throughout and saved as a cookie for later
   })
   .fail(function (rejection) {
     dallinger.allowExit();
@@ -34,29 +16,38 @@ function createAgent () {
   });
 };
 
+function Questionaire() {
+  dallinger.allowExit();
+  dallinger.goToPage('survey');
+}
+
 // Function for response submission. Works for both PGG and spite choices
 function submitResponse(response, type) {
   dallinger.createInfo(my_node_id, {
     contents: response,
     info_type: type
   }).done(function(resp) {
-    hideExperiment();
-    checkTransmit();
+    if(type == "Donation"){
+      hideExperiment();
+      checkTransmit()
+    } else {
+      Questionaire();
+    }
   }).fail(function (rejection) {
-    go_to_questionnaire();
+    Questionaire();
   });
 }
 
+// Hide the experiment
 function hideExperiment(){
-  // Hide the experiment
   $("#headerone").hide();
   $("#Waiting").show();
   $("#PGGrow").hide();
   $("#Submitbutton").hide(); 
 }
 
+// Check for transmissions from the pog
 function checkTransmit (){
-  // Check for transmissions from the pog
   dallinger.getTransmissions(my_node_id, {
     status: "pending"
   }) 
@@ -67,13 +58,12 @@ function checkTransmit (){
     } else {
       setTimeout(function(){
         checkTransmit();
-      }, 1000 ) // Keep checking transmissions
+      }, 1000 )
     }
   })
 }
 
 function processTransmit(transmissions){
-  // Extract the needed info
   numTransmissions = numTransmissions + 1;
   potID = transmissions[0].info_id;
   donID = transmissions[1].info_id;
@@ -90,16 +80,112 @@ function processTransmit(transmissions){
     .done(function(resp) {
         leftovers = resp.info.contents; 
     })
-  setTimeout(function(){ // Wait 2 seconds to allow the above functions to run
+  setTimeout(function(){ // Wait X seconds to allow the above functions to run + add believable delay
     showResults(pot, donation, leftovers)
   }, 2000)
 }
 
 function showResults(pot, donation, leftovers){
-  // Display the results
   $("#Waiting").hide();
-  $("#partner").html("This round your partner donated: " + donation);
+  $("#partner").html("Your partner donated: " + donation);
   $("#partner").show();
-  $("#earnings").html("This round, your total earnings were: " + (parseInt(pot) + parseInt(leftovers)))
+  $("#earnings").html("Your total earnings were: " + (parseInt(pot) + parseInt(leftovers)))
   $("#earnings").show();
+  Score = Score + (parseInt(pot) + parseInt(leftovers));
+  $("#OK").show();
+}
+
+function advanceExperiment() {
+  $("#partner").hide();
+  $("#earnings").hide();
+  $("#OK").hide();
+  if(numTransmissions < 6){
+    $("#headerone").show();
+    $("#PGGrow").show();
+    $("#Submitbutton").show(); 
+  } else {
+    dallinger.storage.set("Score", Score);
+    dallinger.goToPage('instructions/Interim')
+  }
+}
+
+// Interim page code
+
+function randomiseCondition() {
+  my_node_id = dallinger.storage.get("my_node_id");
+  conditions = new Array (
+    "Asocial",
+    "Ranspite",
+    "Rancompassion",
+    "Topspite",
+    "Topcompassion"
+  );
+  selection = conditions[Math.floor(Math.random() * (4 - 0)) + 0];
+  dallinger.createInfo(my_node_id, {
+    contents: selection,
+    info_type: 'Condition'
+  });
+  return selection;
+}
+
+function changePartners() {
+    setTimeout(function(){
+      $("#Partner").hide();
+      $("#Instructions").show();
+      $("#Next").show();
+    }, 4000)
+  }
+
+// Spite page code
+
+function randomiseScore(){
+  num = Math.floor((Math.random() * 80) + 40);
+  return num
+}
+
+function showReduce(){
+  $("#Whatdo").html("Reduce their partners earnings");
+  $("#Whatdo").show();
+  $("#OK").show();
+}
+
+function showCompassion() {
+  $("#Whatdo").html("Not reduce their partners earnings");
+  $("#Whatdo").show();
+  $("#OK").show();
+}
+
+function advanceSpite() {
+  $("#Socialinfo").hide();
+  $("#spitecont").show();
+  $("#OK").hide();
+  $("#Whatdo").hide();
+}
+
+function startSpite(condition) {
+  my_node_id = dallinger.storage.get("my_node_id");
+  $("#Score").html("Your group mates score is: " + randomiseScore());
+  $("#YourScore").html("Your score is: " + dallinger.storage.get("Score"));
+  switch(condition) {
+    case 'Asocial':
+    $("#Socialinfo").hide();
+    $("#spitecont").show();
+    break;
+    case 'Ranspite':
+    $("#Socialinfo").html("Participant 3 in your group decided to: ");
+    showReduce();
+    break;
+    case 'Rancompassion':
+    $("#Socialinfo").html("Participant 3 in your group decided to: ");
+    showCompassion();
+    break;
+    case 'Topspite':
+    $("#Socialinfo").html("The highest scoring member of your group (Participant 3) decided to: ");
+    showReduce();
+    break;
+    case 'Topcompassion':
+    $("#Socialinfo").html("The highest scoring member of your group (Participant 3) decided to: ");
+    showCompassion();
+    break;
+  }
 }
