@@ -17,17 +17,15 @@ class Probe(Node):
     def condition(self):
         return json.loads(self.property2)["condition"]
 
+    @property
+    def Partnerscore(self):
+        return json.loads(self.property3)["Partnerscore"]
+
     @score_in_pgg.setter
     def score_in_pgg(self, val):
         p1 = json.loads(self.property1)
         p1["score_in_pgg"] = val
         self.property1 = json.dumps(p1)
-
-    @condition.setter
-    def condition(self, val):
-        p2 = json.loads(self.property2)
-        p2["condition"] = val
-        self.property2 = json.dumps(p2)
 
 class Pogtwo(Node):
     """Version two of the pot of greed. Handles some experiment backend."""
@@ -48,7 +46,7 @@ class Pogtwo(Node):
 
         # Calculate the earnings
         node = self.network.nodes(type=Probe)[0] # Get the node
-        pog_donation = donation + random.randint(-3,3) # How much does the pog donate back?
+        pog_donation = donation + random.randint(-4,4) # How much does the pog donate back?
         pog_donation = max(pog_donation, 0)
         pog_donation = min(pog_donation, 10)
         total = round((((pog_donation + donation) * 1.5) / 2),0) # What are the total earnings?
