@@ -15,8 +15,8 @@ class Spite(Experiment):
         from . import models
 
         self.models = models
-        self.experiment_repeats = 1 # How many networks?
-        self.initial_recruitment_size = 1 # How many participants? (note, it is always 1 per group)
+        self.experiment_repeats = 5 # How many networks?
+        self.initial_recruitment_size = 5 # How many participants? (note, it is always 1 per group)
         self.known_classes = {
             "Donation": models.Donation,
             "Choice": models.Choice,
@@ -49,7 +49,7 @@ class Spite(Experiment):
     def bonus(self, participant):
         """Calculate a participants bonus."""
         node = participant.nodes()[0]
-        return min(round(node.score_in_pgg * 0.005, 2), 1.00)
+        return min(round(node.score_in_pgg * 0.005, 2), 1.00) # Each point is worth 0.005 cents. Maximum of 1 dollar can be earned
 
     def recruit(self):
         """Recruit one participant at a time until all networks are full."""
@@ -70,12 +70,16 @@ class Spite(Experiment):
             pog.receive()
 
         if info.type == "Condition":
-            node.property2 = json.dumps({
-            'Condition' : info.contents , 
-            })
+            if info.contents in ["Asocial", "Ranspite", "Rancompassion","Topspite","Topcompassion"]:
+                node.property2 = json.dumps({
+                'Condition' : info.contents , 
+                })
+            else:
+                node.property3 = json.dumps({
+                'Partnerscore' : info.contents , 
+                })
 
         if info.type == "Choice": # Placeholder for now. Needs updating once spite mechanics fully decided
             if info.contents == "Yes":
                 node.score_in_pgg = node.score_in_pgg - 10
-            
 

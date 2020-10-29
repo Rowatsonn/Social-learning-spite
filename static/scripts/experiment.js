@@ -9,6 +9,10 @@ function createAgent () {
     dallinger.storage.set("my_network_id", my_network_id);
     numTransmissions = 0; // Set to 0. Once its 5, move on.
     Score = 0; // Updated throughout and saved as a cookie for later
+    $("#assign").hide();
+    $("#partnerid").html("Your partner is Participant " + (parseInt(dallinger.identity.participantId) + 3));
+    $("#partnerid").show();
+    advanceExperiment();
   })
   .fail(function (rejection) {
     dallinger.allowExit();
@@ -110,7 +114,6 @@ function advanceExperiment() {
 }
 
 // Interim page code
-
 function randomiseCondition() {
   my_node_id = dallinger.storage.get("my_node_id");
   conditions = new Array (
@@ -137,9 +140,12 @@ function changePartners() {
   }
 
 // Spite page code
-
 function randomiseScore(){
   num = Math.floor((Math.random() * 80) + 40);
+  dallinger.createInfo(my_node_id, {
+    contents: num,
+    info_type: 'Condition'
+  });
   return num
 }
 
@@ -164,27 +170,29 @@ function advanceSpite() {
 
 function startSpite(condition) {
   my_node_id = dallinger.storage.get("my_node_id");
-  $("#Score").html("Your group mates score is: " + randomiseScore());
+  $("#Score").html("Your partner's score is: " + randomiseScore());
   $("#YourScore").html("Your score is: " + dallinger.storage.get("Score"));
+  $("#partnerid").html("Your partner is Participant " + (parseInt(dallinger.identity.participantId) + 1));
+  $("#partnerid").show();
   switch(condition) {
     case 'Asocial':
     $("#Socialinfo").hide();
     $("#spitecont").show();
     break;
     case 'Ranspite':
-    $("#Socialinfo").html("Participant 3 in your group decided to: ");
+    $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
     showReduce();
     break;
     case 'Rancompassion':
-    $("#Socialinfo").html("Participant 3 in your group decided to: ");
+    $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
     showCompassion();
     break;
     case 'Topspite':
-    $("#Socialinfo").html("The highest scoring member of your group (Participant 3) decided to: ");
+    $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
     showReduce();
     break;
     case 'Topcompassion':
-    $("#Socialinfo").html("The highest scoring member of your group (Participant 3) decided to: ");
+    $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
     showCompassion();
     break;
   }
