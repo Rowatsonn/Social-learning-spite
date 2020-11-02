@@ -59,16 +59,18 @@ class Pogtwo(Node):
         self.transmit(what = poginfo, to_whom = node)
         leftovers = Info(origin = self, contents = (10 - donation)) # The nodes leftovers, for the benefit of JavaScript
         self.transmit(what = leftovers, to_whom = node)
+        score = Info(origin = self, contents = node.score_in_pgg) # The nodes total score, for the benefit of Javascript
+        self.transmit(what = score, to_whom = node)
 
 class Donation(Info):
     """Info submitted when the participant is playing the PGG."""
 
     __mapper_args__ = {"polymorphic_identity": "Donation"}
 
-class Choice(Info):
+class Reduction(Info):
     """Info submitted when the participant chooses whether to be spiteful"""
 
-    __mapper_args__ = {"polymorphic_identity": "Choice"}
+    __mapper_args__ = {"polymorphic_identity": "Reduction"}
 
 class Condition(Info):
     """Info submitted when the participant generates their experimental condition"""
