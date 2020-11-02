@@ -25,15 +25,23 @@ function Questionaire() {
   dallinger.goToPage('survey');
 }
 
+function End() {
+  dallinger.allowExit();
+  dallinger.goToPage('end');
+}
+
 // Function for response submission. Works for both PGG and spite choices
 function submitResponse(response, type) {
+  myDonation = response;
   dallinger.createInfo(my_node_id, {
     contents: response,
     info_type: type
   }).done(function(resp) {
     if(type == "Donation"){
       hideExperiment();
-      checkTransmit()
+      setTimeout(function(){
+        checkTransmit();
+      }, 2000 ) // Wait for the transmissions to all resolve and come through
     } else {
       Questionaire();
     }
@@ -57,7 +65,7 @@ function checkTransmit (){
   }) 
   .done(function (resp){
     transmissions = resp.transmissions;
-    if (transmissions.length == 3){
+    if(transmissions.length == 4){
       processTransmit(transmissions)
     } else {
       setTimeout(function(){
@@ -72,6 +80,7 @@ function processTransmit(transmissions){
   potID = transmissions[0].info_id;
   donID = transmissions[1].info_id;
   leftoverID = transmissions[2].info_id;
+  scoreID = transmissions[3].info_id;
   dallinger.getInfo(my_node_id, potID)
     .done(function(resp) {
         pot = resp.info.contents;
@@ -84,18 +93,24 @@ function processTransmit(transmissions){
     .done(function(resp) {
         leftovers = resp.info.contents; 
     })
+  dallinger.getInfo(my_node_id, scoreID)
+    .done(function(resp) {
+        totalScore = resp.info.contents; 
+    })
   setTimeout(function(){ // Wait X seconds to allow the above functions to run + add believable delay
-    showResults(pot, donation, leftovers)
+    showResults(pot, donation, leftovers, totalScore)
   }, 2000)
 }
 
-function showResults(pot, donation, leftovers){
+function showResults(pot, donation, leftovers, totalScore){
+  Score = Score + (parseInt(pot) + parseInt(leftovers)); 
   $("#Waiting").hide();
+  $("#you").html("You donated: " + myDonation);
+  $("#you").show();
   $("#partner").html("Your partner donated: " + donation);
   $("#partner").show();
-  $("#earnings").html("Your total earnings were: " + (parseInt(pot) + parseInt(leftovers)))
+  $("#earnings").html("This round, you earned: " + (parseInt(pot) + parseInt(leftovers)));
   $("#earnings").show();
-  Score = Score + (parseInt(pot) + parseInt(leftovers));
   $("#OK").show();
 }
 
@@ -103,6 +118,7 @@ function advanceExperiment() {
   $("#partner").hide();
   $("#earnings").hide();
   $("#OK").hide();
+  $("#you").hide();
   if(numTransmissions < 6){
     $("#headerone").show();
     $("#PGGrow").show();
@@ -170,8 +186,10 @@ function advanceSpite() {
 
 function startSpite(condition) {
   my_node_id = dallinger.storage.get("my_node_id");
-  $("#Score").html("Your partner's score is: " + randomiseScore());
-  $("#YourScore").html("Your score is: " + dallinger.storage.get("Score"));
+  $("#Score").html(randomiseScore());
+  Score = parseInt($("#Score").html());
+  $("#YourScore").html(dallinger.storage.get("Score"));
+  yourScore = parseInt($("#YourScore").html());
   $("#partnerid").html("Your partner is Participant " + (parseInt(dallinger.identity.participantId) + 1));
   $("#partnerid").show();
   switch(condition) {
@@ -197,3 +215,13 @@ function startSpite(condition) {
     break;
   }
 }
+
+function updatePoints(value) {
+  // Code for slider to update points displayed
+  value = parseInt(value);
+  $("#Score").html(Score - (value * 3))
+  $("#YourScore").html(yourScore - value);
+}
+
+
+
