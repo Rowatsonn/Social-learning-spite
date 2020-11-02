@@ -24,16 +24,39 @@
    <div class = "row">
       <div class = "col-md-12 text-center">
          <img src="../static/images/Outline.png" style="width:150px;height:200px;"> 
-         <h4 id = "Score">Placeholder</h4>
-         <h4 id = "YourScore">Placeholder<
       </div>
    </div>
    <div class = "row">
-      <div class = "col-md-3 text-center">
-         <button onClick = "submitResponse('Yes', 'Choice')" class = "btn btn-lg btn-success" type = "button">Yes</button></div>
-      <div class = "col-md-6"></div>
-      <div class = "col-md-3 text-center">
-         <button onClick = "submitResponse('No', 'Choice')" class = "btn btn-lg btn-success" type = "button">No</button></div>
+      <div class = "col-md-12 text-center">
+         <div class="slidecontainer">
+            <label for = "Reduction">Reduction:</label>
+               <input type="text" class="js-range-slider" name="my_range" value=""
+        	   data-min="0"
+        	   data-max="10"
+        	   data-from="0"/>
+         </div>
+      </div>
+    </div>   
+   <div class = "row">
+      <div class = "col-md-6 text-center">
+         <h4>Your score is:</h4>
+      </div>
+      <div class = "col-md-6 text-center">
+         <h4>Your new partner's score is:</h4>
+      </div>
+   </div>
+   <div class = "row">
+      <div class = "col-md-6 text-center">
+         <h4 id = "YourScore">Placeholder</h4>
+      </div>
+      <div class = "col-md-6 text-center">
+         <h4 id = "Score">Placeholder</h4>
+      </div>
+   </div>
+   <div class = "row" id = "Submitbutton">
+      <div class = "col-md-3">
+         <button onClick = "submitResponse($slider.prop('value'), 'Reduction')" class="btn btn-success btn-lg" type="button" id="submission">Submit Choice</button>
+      </div>
    </div>
 </div>
 <div class = "container" id = "OK" style = "display:none;">
@@ -54,6 +77,12 @@
 {% block scripts %}
     <script>
        condition = dallinger.storage.get("Condition");
+       var $slider = $(".js-range-slider");
+          $(".js-range-slider").ionRangeSlider({
+          skin: "big"});
+       $slider.on("change", function(){
+          updatePoints($slider.prop('value'));
+       });
        setTimeout(function(){
           startSpite(condition)
        }, 10000)
