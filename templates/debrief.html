@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+   <div class = "container">
+      <div class = "row">
+         <div class = "col-md-12 text-center">
+            <h1>Debrief form</h1>
+         </div>
+      </div>
+      <div class = "row">
+         <div class = "col-md-12 text-center">
+            <p>Thank you for taking part in this study. Before continuing, please read the following information carefully. During the study, you were misled about the nature of the experiment. Now that your participation is completed, these deceptions may now be explained to you. Once you have read this information, if you are happy for your data to be used, you may simply click continue below and proceed to submit the HIT. If you decide you would now like to withdraw from the study, please follow the above steps to submit the HIT but then contact the lead researcher (robin.o.watson@durham.ac.uk) who will arrange for your data to be destroyed.</p>
+            <p>Throughout the experiment, you were led to believe that you were playing with other real participants. This was not the case, instead, at every stage you were playing with alone with a bot. Therefore, at no point in this experiment have your decisions or behaviour impacted any other participant. The experiment also reported to have randomly allocated you to be the decider in part two. This, again, was untrue, as every real participant who takes part in this study will be assigned this role. This deception was necessary to ensure the integrity of the experimental design and behavioural measures.</p>
+            <p>This study’s true aims were to broadly understand the evolution of both cooperative and antisocial behaviour and how this might be influenced by social learning. This was done by measuring your cooperative behaviour in part one and your antisocial behaviour in part two.</p>
+            <p>If you would like further information about the study, would like to know what the general findings are once all the data has been analysed, or have any other questions in general, please contact the lead researcher for this project. Robin Watson [robin.o.watson@durham.ac.uk]. I cannot, however, provide you with your individual results.</p>
+         </div>
+      </div>  
+      <div class="row">
+         <div class="col-md-10"></div>
+         <div class="col-md-2">
+            <button type="button" class="btn btn-success btn-lg" onClick="dallinger.allowExit(); dallinger.goToPage('survey')">Next</button>
+         </div>
+      </div>
+   </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    </script>
+{% endblock %}

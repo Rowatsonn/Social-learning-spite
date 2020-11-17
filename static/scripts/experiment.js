@@ -25,11 +25,6 @@ function Questionaire() {
   dallinger.goToPage('survey');
 }
 
-function End() {
-  dallinger.allowExit();
-  dallinger.goToPage('end');
-}
-
 // Function for response submission. Works for both PGG and spite choices
 function submitResponse(response, type) {
   myDonation = response;
@@ -43,7 +38,8 @@ function submitResponse(response, type) {
         checkTransmit();
       }, 2000 ) // Wait for the transmissions to all resolve and come through
     } else {
-      Questionaire();
+      dallinger.allowExit();
+      dallinger.goToPage('debrief');
     }
   }).fail(function (rejection) {
     Questionaire();

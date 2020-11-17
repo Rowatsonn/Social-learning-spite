@@ -19,7 +19,7 @@ class Spite(Experiment):
         self.initial_recruitment_size = 1 # How many participants? (note, it is always 1 per group)
         self.known_classes = {
             "Donation": models.Donation,
-            "Choice": models.Choice,
+            "Reduction": models.Reduction,
             "Condition": models.Condition
         }
 
