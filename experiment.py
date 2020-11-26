@@ -79,6 +79,6 @@ class Spite(Experiment):
                 'Partnerscore' : info.contents , 
                 })
 
-        if info.type == "Reduction": # Placeholder for now. Needs updating once spite mechanics fully decided
-            node.score_in_pgg = node.score_in_pgg - info.contents
+        if info.type == "Reduction":
+            node.score_in_pgg = (int(node.score_in_pgg) - int(info.contents))
 
