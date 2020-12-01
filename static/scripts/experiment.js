@@ -15,13 +15,13 @@ function createAgent () {
       $("#partnerid").html("Your partner is Participant " + (parseInt(dallinger.identity.participantId) + 3));
       $("#partnerid").show();
       advanceExperiment();
-    }, 4000)
+    }, 4000);
   })
   .fail(function (rejection) {
     dallinger.allowExit();
     dallinger.error(rejection);
   });
-};
+}
 
 function Questionaire() {
   dallinger.allowExit();
@@ -39,7 +39,7 @@ function submitResponse(response, type) {
       hideExperiment();
       setTimeout(function(){
         checkTransmit();
-      }, 2000 ) // Wait for the transmissions to all resolve and come through
+      }, 2000); // Wait for the transmissions to all resolve and come through
     } else {
       dallinger.allowExit();
       dallinger.goToPage('debrief');
@@ -65,13 +65,13 @@ function checkTransmit (){
   .done(function (resp){
     transmissions = resp.transmissions;
     if(transmissions.length == 4){
-      processTransmit(transmissions)
+      processTransmit(transmissions);
     } else {
       setTimeout(function(){
         checkTransmit();
-      }, 1000 )
+      }, 1000 );
     }
-  })
+  });
 }
 
 function processTransmit(transmissions){
@@ -83,22 +83,22 @@ function processTransmit(transmissions){
   dallinger.getInfo(my_node_id, potID)
     .done(function(resp) {
         pot = resp.info.contents;
-    })
+    });
   dallinger.getInfo(my_node_id, donID)
     .done(function(resp) {
         donation = resp.info.contents; 
-    })
+    });
   dallinger.getInfo(my_node_id, leftoverID)
     .done(function(resp) {
         leftovers = resp.info.contents; 
-    })
+    });
   dallinger.getInfo(my_node_id, scoreID)
     .done(function(resp) {
         totalScore = resp.info.contents; 
-    })
-  setTimeout(function(){ // Wait X seconds to allow the above functions to run + add believable delay
-    showResults(pot, donation, leftovers, totalScore)
-  }, 2000)
+    });
+  setTimeout(function() { // Wait X seconds to allow the above functions to run + add believable delay
+    showResults(pot, donation, leftovers, totalScore);
+  }, 2000);
 }
 
 function showResults(pot, donation, leftovers, totalScore){
@@ -124,7 +124,7 @@ function advanceExperiment() {
     $("#Submitbutton").show(); 
   } else {
     dallinger.storage.set("Score", Score);
-    dallinger.goToPage('instructions/Interim')
+    dallinger.goToPage('instructions/Interim');
   }
 }
 
@@ -151,7 +151,7 @@ function changePartners() {
       $("#Partner").hide();
       $("#Instructions").show();
       $("#Next").show();
-    }, 4000)
+    }, 4000);
   }
 
 // Spite page code
@@ -161,7 +161,7 @@ function randomiseScore(){
     contents: num,
     info_type: 'Condition'
   });
-  return num
+  return num;
 }
 
 function showReduce(){
@@ -218,7 +218,7 @@ function startSpite(condition) {
 function updatePoints(value) {
   // Code for slider to update points displayed
   value = parseInt(value);
-  $("#Score").html(Score - (value * 3))
+  $("#Score").html(Score - (value * 3));
   $("#YourScore").html(yourScore - value);
 }
 
