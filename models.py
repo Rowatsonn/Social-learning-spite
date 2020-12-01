@@ -2,6 +2,7 @@ from dallinger.models import Node, Info
 import random
 import json
 
+
 class Probe(Node):
     """ Just a node, but it needed a name. Also has a score property."""
 
@@ -27,13 +28,14 @@ class Probe(Node):
         p1["score_in_pgg"] = val
         self.property1 = json.dumps(p1)
 
+
 class Pogtwo(Node):
     """Version two of the pot of greed. Handles some experiment backend."""
-    
+
     __mapper_args__ = {
         "polymorphic_identity": "pot_of_greed_bot"
     }
-    
+
     def __init__(self, network):
         super().__init__(network)
 
@@ -62,18 +64,20 @@ class Pogtwo(Node):
         score = Info(origin = self, contents = node.score_in_pgg) # The nodes total score, for the benefit of Javascript
         self.transmit(what = score, to_whom = node)
 
+
 class Donation(Info):
     """Info submitted when the participant is playing the PGG."""
 
     __mapper_args__ = {"polymorphic_identity": "Donation"}
+
 
 class Reduction(Info):
     """Info submitted when the participant chooses whether to be spiteful"""
 
     __mapper_args__ = {"polymorphic_identity": "Reduction"}
 
+
 class Condition(Info):
     """Info submitted when the participant generates their experimental condition"""
 
     __mapper_args__ = {"polymorphic_identity": "Condition"}
-
