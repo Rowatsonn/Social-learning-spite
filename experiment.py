@@ -1,6 +1,5 @@
 """Social learning of spite experiment. Played with one player only + a bot."""
 
-from dallinger.config import get_config
 from dallinger.networks import FullyConnected
 from dallinger.experiment import Experiment
 
