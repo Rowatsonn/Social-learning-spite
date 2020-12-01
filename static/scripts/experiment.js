@@ -64,7 +64,7 @@ function checkTransmit (){
   }) 
   .done(function (resp){
     transmissions = resp.transmissions;
-    if(transmissions.length == 4){
+    if(transmissions.length > 0){
       processTransmit(transmissions);
     } else {
       setTimeout(function(){
@@ -76,29 +76,18 @@ function checkTransmit (){
 
 function processTransmit(transmissions){
   numTransmissions = numTransmissions + 1;
-  potID = transmissions[0].info_id;
-  donID = transmissions[1].info_id;
-  leftoverID = transmissions[2].info_id;
-  scoreID = transmissions[3].info_id;
-  dallinger.getInfo(my_node_id, potID)
-    .done(function(resp) {
-        pot = resp.info.contents;
-    });
-  dallinger.getInfo(my_node_id, donID)
-    .done(function(resp) {
-        donation = resp.info.contents; 
-    });
-  dallinger.getInfo(my_node_id, leftoverID)
-    .done(function(resp) {
-        leftovers = resp.info.contents; 
-    });
-  dallinger.getInfo(my_node_id, scoreID)
-    .done(function(resp) {
-        totalScore = resp.info.contents; 
-    });
-  setTimeout(function() { // Wait X seconds to allow the above functions to run + add believable delay
-    showResults(pot, donation, leftovers, totalScore);
-  }, 2000);
+  summary_id = transmissions[0].info_id;
+  dallinger.getInfo(my_node_id, summary_id)
+  .done(function(resp) {
+    summary = JSON.parse(resp.info.contents);
+    pot = summary.total_earnings;
+    donation = summary.pog_donation;
+    leftovers = 10 - summary.node_donation;
+    totalScore = summary.score_in_pgg;
+    setTimeout(function() {
+      showResults(pot, donation, leftovers, totalScore);
+    }, 2000);
+  });
 }
 
 function showResults(pot, donation, leftovers, totalScore){
