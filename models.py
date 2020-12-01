@@ -3,6 +3,10 @@ import random
 import json
 
 
+def bound(x, lower, upper):
+    return max(min(x, upper), lower)
+
+
 class Probe(Node):
     """ Just a node, but it needed a name. Also has a score property."""
 
@@ -45,9 +49,7 @@ class Pogtwo(Node):
 
         # Calculate the earnings
         node = infos[0].origin  # Get the node
-        pog_donation = donation + random.randint(-4, 4)  # How much does the pog donate back?
-        pog_donation = max(pog_donation, 0)
-        pog_donation = min(pog_donation, 10)
+        pog_donation = bound(donation + random.randint(-4, 4), 0, 10)  # How much does the pog donate back?
         total = round((((pog_donation + donation) * 1.5) / 2), 0)  # What are the total earnings?
         node.score_in_pgg = node.score_in_pgg + (10 - donation) + total  # Record the nodes earnings
 
