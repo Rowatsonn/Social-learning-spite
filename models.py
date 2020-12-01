@@ -36,9 +36,6 @@ class Pogtwo(Node):
         "polymorphic_identity": "pot_of_greed_bot"
     }
 
-    def __init__(self, network):
-        super().__init__(network)
-
     def update(self, infos):
         """This will handle working out the scores. Infos end up here whenever .receieve()
         is called in the backend"""
