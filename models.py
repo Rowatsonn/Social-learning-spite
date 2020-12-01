@@ -47,21 +47,21 @@ class Pogtwo(Node):
         donation = int(infos[0].contents)
 
         # Calculate the earnings
-        node = self.network.nodes(type=Probe)[0] # Get the node
-        pog_donation = donation + random.randint(-4,4) # How much does the pog donate back?
+        node = self.network.nodes(type=Probe)[0]  # Get the node
+        pog_donation = donation + random.randint(-4,4)  # How much does the pog donate back?
         pog_donation = max(pog_donation, 0)
         pog_donation = min(pog_donation, 10)
-        total = round((((pog_donation + donation) * 1.5) / 2),0) # What are the total earnings?
-        node.score_in_pgg = node.score_in_pgg + (10 - donation) + total # Record the nodes earnings
+        total = round((((pog_donation + donation) * 1.5) / 2),0)  # What are the total earnings?
+        node.score_in_pgg = node.score_in_pgg + (10 - donation) + total  # Record the nodes earnings
 
         # Inform the node
-        totalinfo = Info(origin = self, contents = total) # Their earnings
+        totalinfo = Info(origin = self, contents = total)  # Their earnings
         self.transmit(what = totalinfo, to_whom = node)
-        poginfo = Info(origin = self, contents = pog_donation) # The pogs donation
+        poginfo = Info(origin = self, contents = pog_donation)  # The pogs donation
         self.transmit(what = poginfo, to_whom = node)
-        leftovers = Info(origin = self, contents = (10 - donation)) # The nodes leftovers, for the benefit of JavaScript
+        leftovers = Info(origin = self, contents = (10 - donation))  # The nodes leftovers, for the benefit of JavaScript
         self.transmit(what = leftovers, to_whom = node)
-        score = Info(origin = self, contents = node.score_in_pgg) # The nodes total score, for the benefit of Javascript
+        score = Info(origin = self, contents = node.score_in_pgg)  # The nodes total score, for the benefit of Javascript
         self.transmit(what = score, to_whom = node)
 
 
