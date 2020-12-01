@@ -50,7 +50,7 @@ class Pogtwo(Node):
         # Calculate the earnings
         node = infos[0].origin  # Get the node
         pog_donation = bound(donation + random.randint(-4, 4), 0, 10)  # How much does the pog donate back?
-        total = round((((pog_donation + donation) * 1.5) / 2), 0)  # What are the total earnings?
+        total = round(((pog_donation + donation) * 0.75), 0)  # What are the total earnings?
         node.score_in_pgg = node.score_in_pgg + (10 - donation) + total  # Record the nodes earnings
 
         # Inform the node
