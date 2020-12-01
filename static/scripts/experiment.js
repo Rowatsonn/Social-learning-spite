@@ -69,7 +69,7 @@ function checkTransmit (){
     } else {
       setTimeout(function(){
         checkTransmit();
-      }, 1000 );
+      }, 1000);
     }
   });
 }
@@ -193,25 +193,25 @@ function startSpite(condition) {
   $("#partnerid").show();
   switch(condition) {
     case 'Asocial':
-    $("#Socialinfo").hide();
-    $("#spitecont").show();
-    break;
+      $("#Socialinfo").hide();
+      $("#spitecont").show();
+      break;
     case 'Ranspite':
-    $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
-    showReduce();
-    break;
+      $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
+      showReduce();
+      break;
     case 'Rancompassion':
-    $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
-    showCompassion();
-    break;
+      $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
+      showCompassion();
+      break;
     case 'Topspite':
-    $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
-    showReduce();
-    break;
+      $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
+      showReduce();
+      break;
     case 'Topcompassion':
-    $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
-    showCompassion();
-    break;
+      $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
+      showCompassion();
+      break;
   }
 }
 
