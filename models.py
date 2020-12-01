@@ -48,10 +48,10 @@ class Pogtwo(Node):
 
         # Calculate the earnings
         node = self.network.nodes(type=Probe)[0]  # Get the node
-        pog_donation = donation + random.randint(-4,4)  # How much does the pog donate back?
+        pog_donation = donation + random.randint(-4, 4)  # How much does the pog donate back?
         pog_donation = max(pog_donation, 0)
         pog_donation = min(pog_donation, 10)
-        total = round((((pog_donation + donation) * 1.5) / 2),0)  # What are the total earnings?
+        total = round((((pog_donation + donation) * 1.5) / 2), 0)  # What are the total earnings?
         node.score_in_pgg = node.score_in_pgg + (10 - donation) + total  # Record the nodes earnings
 
         # Inform the node
