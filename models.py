@@ -44,21 +44,19 @@ class Pogtwo(Node):
         """This will handle working out the scores. Infos end up here whenever .receieve()
         is called in the backend"""
 
-        # Find the nodes donation
-        donation = int(infos[0].contents)
+        node_donation = int(infos[0].contents)
+        pog_donation = bound(node_donation + random.randint(-4, 4), 0, 10)
+        total_earnings = round((pog_donation + node_donation) * 0.75, 0)
 
-        # Calculate the earnings
-        node = infos[0].origin  # Get the node
-        pog_donation = bound(donation + random.randint(-4, 4), 0, 10)  # How much does the pog donate back?
-        total = round(((pog_donation + donation) * 0.75), 0)  # What are the total earnings?
-        node.score_in_pgg = node.score_in_pgg + (10 - donation) + total  # Record the nodes earnings
+        node = infos[0].origin
+        node.score_in_pgg = node.score_in_pgg + 10 - node_donation + total_earnings
 
         # Inform the node
-        totalinfo = Info(origin=self, contents=total)  # Their earnings
+        totalinfo = Info(origin=self, contents=total_earnings)  # Their earnings
         self.transmit(what=totalinfo, to_whom=node)
         poginfo = Info(origin=self, contents=pog_donation)  # The pogs donation
         self.transmit(what=poginfo, to_whom=node)
-        leftovers = Info(origin=self, contents=(10 - donation))  # The nodes leftovers, for the benefit of JavaScript
+        leftovers = Info(origin=self, contents=(10 - node_donation))  # The nodes leftovers, for the benefit of JavaScript
         self.transmit(what=leftovers, to_whom=node)
         score = Info(origin=self, contents=node.score_in_pgg)  # The nodes total score, for the benefit of Javascript
         self.transmit(what=score, to_whom=node)
