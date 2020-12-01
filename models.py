@@ -44,7 +44,7 @@ class Pogtwo(Node):
         donation = int(infos[0].contents)
 
         # Calculate the earnings
-        node = self.network.nodes(type=Probe)[0]  # Get the node
+        node = infos[0].origin  # Get the node
         pog_donation = donation + random.randint(-4, 4)  # How much does the pog donate back?
         pog_donation = max(pog_donation, 0)
         pog_donation = min(pog_donation, 10)
