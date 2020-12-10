@@ -38,6 +38,12 @@ class Spite(Experiment):
         """Return a new network."""
         return FullyConnected(max_size=2)  # 1 Pog, 1 Participant
 
+    def get_network_for_participant(self, participant):
+        if participant.nodes():
+            return None
+        else:
+            return self.networks(full=False)[0]
+
     def create_node(self, participant, network):
         """Create a Probe for the participant"""
         node = self.models.Probe(network=network, participant=participant)
