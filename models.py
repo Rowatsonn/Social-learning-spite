@@ -16,15 +16,15 @@ class Probe(Node):
 
     @property
     def score_in_pgg(self):
-        return json.loads(self.property1)["score_in_pgg"]
+        return int(self.property1)
 
     @property
     def condition(self):
-        return json.loads(self.property2)["condition"]
+        return self.property2
 
     @property
     def Partnerscore(self):
-        return json.loads(self.property3)["Partnerscore"]
+        return int(self.property3)
 
     @score_in_pgg.setter
     def score_in_pgg(self, val):
