@@ -28,9 +28,7 @@ class Probe(Node):
 
     @score_in_pgg.setter
     def score_in_pgg(self, val):
-        p1 = json.loads(self.property1)
-        p1["score_in_pgg"] = val
-        self.property1 = json.dumps(p1)
+        self.property1 = str(val)
 
 
 class Pogtwo(Node):
