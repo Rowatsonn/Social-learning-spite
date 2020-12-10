@@ -30,6 +30,14 @@ class Probe(Node):
     def score_in_pgg(self, val):
         self.property1 = str(val)
 
+    @condition.setter
+    def condition(self, val):
+        self.property2 = val
+
+    @Partnerscore.setter
+    def Partnerscore(self, val):
+        self.property3 = str(val)
+
 
 class Pogtwo(Node):
     """Version two of the pot of greed. Handles some experiment backend."""
