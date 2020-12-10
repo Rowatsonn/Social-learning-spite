@@ -47,9 +47,7 @@ class Spite(Experiment):
     def create_node(self, participant, network):
         """Create a Probe for the participant"""
         node = self.models.Probe(network=network, participant=participant)
-        node.property1 = json.dumps({
-            'score_in_pgg': 0
-        })
+        node.score_in_pgg = 0
         return node
 
     def bonus(self, participant):
@@ -68,15 +66,11 @@ class Spite(Experiment):
             node.transmit(what=info, to_whom=self.models.Pogtwo)[0]
             pog.receive()
 
-        if info.type == "Condition":
+        elif info.type == "Condition":
             if info.contents in ["Asocial", "Ranspite", "Rancompassion", "Topspite", "Topcompassion"]:
-                node.property2 = json.dumps({
-                    'Condition': info.contents
-                })
+                node.condition = info.contents
             else:
-                node.property3 = json.dumps({
-                    'Partnerscore': info.contents,
-                })
+                node.Partnerscore = info.contents
 
         if info.type == "Reduction":
             node.score_in_pgg = (int(node.score_in_pgg) - int(info.contents))
