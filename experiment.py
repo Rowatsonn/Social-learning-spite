@@ -57,13 +57,6 @@ class Spite(Experiment):
         node = participant.nodes()[0]
         return min(round(node.score_in_pgg * 0.005, 2), 1.00)  # Each point is worth 0.005 cents. Maximum of 1 dollar can be earned
 
-    def recruit(self):
-        """Recruit one participant at a time until all networks are full."""
-        if self.networks(full=False):
-            self.recruiter.recruit(n=1)
-        else:
-            self.recruiter.close_recruitment()
-
     def info_post_request(self, node, info):
         """Depending on the info type, different things will happen here."""
         pog = node.network.nodes(type=self.models.Pogtwo)[0]
