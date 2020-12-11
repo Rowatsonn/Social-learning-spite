@@ -2,6 +2,11 @@ from dallinger.models import Node, Info
 import random
 import json
 
+
+def bound(x, lower, upper):
+    return max(min(x, upper), lower)
+
+
 class Probe(Node):
     """ Just a node, but it needed a name. Also has a score property."""
 
@@ -11,69 +16,69 @@ class Probe(Node):
 
     @property
     def score_in_pgg(self):
-        return json.loads(self.property1)["score_in_pgg"]
+        return int(self.property1)
 
     @property
     def condition(self):
-        return json.loads(self.property2)["condition"]
+        return self.property2
 
     @property
     def Partnerscore(self):
-        return json.loads(self.property3)["Partnerscore"]
+        return int(self.property3)
 
     @score_in_pgg.setter
     def score_in_pgg(self, val):
-        p1 = json.loads(self.property1)
-        p1["score_in_pgg"] = val
-        self.property1 = json.dumps(p1)
+        self.property1 = str(val)
+
+    @condition.setter
+    def condition(self, val):
+        self.property2 = val
+
+    @Partnerscore.setter
+    def Partnerscore(self, val):
+        self.property3 = str(val)
+
 
 class Pogtwo(Node):
     """Version two of the pot of greed. Handles some experiment backend."""
-    
+
     __mapper_args__ = {
         "polymorphic_identity": "pot_of_greed_bot"
     }
-    
-    def __init__(self, network):
-        super().__init__(network)
 
     def update(self, infos):
         """This will handle working out the scores. Infos end up here whenever .receieve()
         is called in the backend"""
 
-        # Find the nodes donation
-        donation = int(infos[0].contents)
+        node_donation = int(infos[0].contents)
+        pog_donation = bound(node_donation + random.randint(-4, 4), 0, 10)
+        total_earnings = round((pog_donation + node_donation) * 0.75, 0)
 
-        # Calculate the earnings
-        node = self.network.nodes(type=Probe)[0] # Get the node
-        pog_donation = donation + random.randint(-4,4) # How much does the pog donate back?
-        pog_donation = max(pog_donation, 0)
-        pog_donation = min(pog_donation, 10)
-        total = round((((pog_donation + donation) * 1.5) / 2),0) # What are the total earnings?
-        node.score_in_pgg = node.score_in_pgg + (10 - donation) + total # Record the nodes earnings
+        node = infos[0].origin
+        node.score_in_pgg = node.score_in_pgg + 10 - node_donation + total_earnings
 
-        # Inform the node
-        totalinfo = Info(origin = self, contents = total) # Their earnings
-        self.transmit(what = totalinfo, to_whom = node)
-        poginfo = Info(origin = self, contents = pog_donation) # The pogs donation
-        self.transmit(what = poginfo, to_whom = node)
-        leftovers = Info(origin = self, contents = (10 - donation)) # The nodes leftovers, for the benefit of JavaScript
-        self.transmit(what = leftovers, to_whom = node)
-        score = Info(origin = self, contents = node.score_in_pgg) # The nodes total score, for the benefit of Javascript
-        self.transmit(what = score, to_whom = node)
+        summary = {
+            'total_earnings': total_earnings,
+            'pog_donation': pog_donation,
+            'node_donation': node_donation,
+            'score_in_pgg': node.score_in_pgg
+        }
+        self.transmit(what=Info(origin=self, contents=json.dumps(summary)))
+
 
 class Donation(Info):
     """Info submitted when the participant is playing the PGG."""
 
     __mapper_args__ = {"polymorphic_identity": "Donation"}
 
+
 class Reduction(Info):
     """Info submitted when the participant chooses whether to be spiteful"""
 
     __mapper_args__ = {"polymorphic_identity": "Reduction"}
 
+
 class Condition(Info):
     """Info submitted when the participant generates their experimental condition"""
 
     __mapper_args__ = {"polymorphic_identity": "Condition"}
-

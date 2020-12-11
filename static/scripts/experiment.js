@@ -15,13 +15,13 @@ function createAgent () {
       $("#partnerid").html("Your partner is Participant " + (parseInt(dallinger.identity.participantId) + 3));
       $("#partnerid").show();
       advanceExperiment();
-    }, 4000)
+    }, 4000);
   })
   .fail(function (rejection) {
     dallinger.allowExit();
     dallinger.error(rejection);
   });
-};
+}
 
 function Questionaire() {
   dallinger.allowExit();
@@ -39,7 +39,7 @@ function submitResponse(response, type) {
       hideExperiment();
       setTimeout(function(){
         checkTransmit();
-      }, 2000 ) // Wait for the transmissions to all resolve and come through
+      }, 2000); // Wait for the transmissions to all resolve and come through
     } else {
       dallinger.allowExit();
       dallinger.goToPage('debrief');
@@ -64,41 +64,30 @@ function checkTransmit (){
   }) 
   .done(function (resp){
     transmissions = resp.transmissions;
-    if(transmissions.length == 4){
-      processTransmit(transmissions)
+    if(transmissions.length > 0){
+      processTransmit(transmissions);
     } else {
       setTimeout(function(){
         checkTransmit();
-      }, 1000 )
+      }, 1000);
     }
-  })
+  });
 }
 
 function processTransmit(transmissions){
   numTransmissions = numTransmissions + 1;
-  potID = transmissions[0].info_id;
-  donID = transmissions[1].info_id;
-  leftoverID = transmissions[2].info_id;
-  scoreID = transmissions[3].info_id;
-  dallinger.getInfo(my_node_id, potID)
-    .done(function(resp) {
-        pot = resp.info.contents;
-    })
-  dallinger.getInfo(my_node_id, donID)
-    .done(function(resp) {
-        donation = resp.info.contents; 
-    })
-  dallinger.getInfo(my_node_id, leftoverID)
-    .done(function(resp) {
-        leftovers = resp.info.contents; 
-    })
-  dallinger.getInfo(my_node_id, scoreID)
-    .done(function(resp) {
-        totalScore = resp.info.contents; 
-    })
-  setTimeout(function(){ // Wait X seconds to allow the above functions to run + add believable delay
-    showResults(pot, donation, leftovers, totalScore)
-  }, 2000)
+  summary_id = transmissions[0].info_id;
+  dallinger.getInfo(my_node_id, summary_id)
+  .done(function(resp) {
+    summary = JSON.parse(resp.info.contents);
+    pot = summary.total_earnings;
+    donation = summary.pog_donation;
+    leftovers = 10 - summary.node_donation;
+    totalScore = summary.score_in_pgg;
+    setTimeout(function() {
+      showResults(pot, donation, leftovers, totalScore);
+    }, 2000);
+  });
 }
 
 function showResults(pot, donation, leftovers, totalScore){
@@ -124,7 +113,7 @@ function advanceExperiment() {
     $("#Submitbutton").show(); 
   } else {
     dallinger.storage.set("Score", Score);
-    dallinger.goToPage('instructions/Interim')
+    dallinger.goToPage('instructions/Interim');
   }
 }
 
@@ -151,7 +140,7 @@ function changePartners() {
       $("#Partner").hide();
       $("#Instructions").show();
       $("#Next").show();
-    }, 4000)
+    }, 4000);
   }
 
 // Spite page code
@@ -161,7 +150,7 @@ function randomiseScore(){
     contents: num,
     info_type: 'Condition'
   });
-  return num
+  return num;
 }
 
 function showReduce(){
@@ -193,32 +182,32 @@ function startSpite(condition) {
   $("#partnerid").show();
   switch(condition) {
     case 'Asocial':
-    $("#Socialinfo").hide();
-    $("#spitecont").show();
-    break;
+      $("#Socialinfo").hide();
+      $("#spitecont").show();
+      break;
     case 'Ranspite':
-    $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
-    showReduce();
-    break;
+      $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
+      showReduce();
+      break;
     case 'Rancompassion':
-    $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
-    showCompassion();
-    break;
+      $("#Socialinfo").html("Participant " + (parseInt(dallinger.identity.participantId) + 2) + " in your group decided to: ");
+      showCompassion();
+      break;
     case 'Topspite':
-    $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
-    showReduce();
-    break;
+      $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
+      showReduce();
+      break;
     case 'Topcompassion':
-    $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
-    showCompassion();
-    break;
+      $("#Socialinfo").html("The highest scoring member of your group (Participant " + (parseInt(dallinger.identity.participantId) + 2) + ") decided to: ");
+      showCompassion();
+      break;
   }
 }
 
 function updatePoints(value) {
   // Code for slider to update points displayed
   value = parseInt(value);
-  $("#Score").html(Score - (value * 3))
+  $("#Score").html(Score - (value * 3));
   $("#YourScore").html(yourScore - value);
 }
 

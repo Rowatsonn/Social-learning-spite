@@ -1,10 +1,10 @@
 """Social learning of spite experiment. Played with one player only + a bot."""
 
-from dallinger.config import get_config
 from dallinger.networks import FullyConnected
 from dallinger.experiment import Experiment
 
 import json
+
 
 class Spite(Experiment):
     """Define the structure of the experiment."""
@@ -15,8 +15,8 @@ class Spite(Experiment):
         from . import models
 
         self.models = models
-        self.experiment_repeats = 1 # How many networks?
-        self.initial_recruitment_size = 1 # How many participants? (note, it is always 1 per group)
+        self.experiment_repeats = 1  # How many networks?
+        self.initial_recruitment_size = self.experiment_repeats  # How many participants? (note, it is always 1 per group)
         self.known_classes = {
             "Donation": models.Donation,
             "Reduction": models.Reduction,
@@ -36,27 +36,24 @@ class Spite(Experiment):
 
     def create_network(self):
         """Return a new network."""
-        return FullyConnected(max_size=2) # 1 Pog, 1 Participant
+        return FullyConnected(max_size=2)  # 1 Pog, 1 Participant
+
+    def get_network_for_participant(self, participant):
+        if participant.nodes():
+            return None
+        else:
+            return self.networks(full=False)[0]
 
     def create_node(self, participant, network):
         """Create a Probe for the participant"""
         node = self.models.Probe(network=network, participant=participant)
-        node.property1 = json.dumps({
-            'score_in_pgg' : 0 , 
-        })
+        node.score_in_pgg = 0
         return node
 
     def bonus(self, participant):
         """Calculate a participants bonus."""
         node = participant.nodes()[0]
-        return min(round(node.score_in_pgg * 0.005, 2), 1.00) # Each point is worth 0.005 cents. Maximum of 1 dollar can be earned
-
-    def recruit(self):
-        """Recruit one participant at a time until all networks are full."""
-        if self.networks(full=False):
-            self.recruiter.recruit(n=1)
-        else:
-            self.recruiter.close_recruitment()
+        return min(round(node.score_in_pgg * 0.005, 2), 1.00)  # Each point is worth 0.005 cents. Maximum of 1 dollar can be earned
 
     def info_post_request(self, node, info):
         """Depending on the info type, different things will happen here."""
@@ -66,19 +63,14 @@ class Spite(Experiment):
             raise ValueError("Node {} is failed, it should not be making infos".format(node.id))
 
         if info.type == "Donation":
-            node.transmit(what = info, to_whom = self.models.Pogtwo)[0] 
+            node.transmit(what=info, to_whom=self.models.Pogtwo)[0]
             pog.receive()
 
-        if info.type == "Condition":
-            if info.contents in ["Asocial", "Ranspite", "Rancompassion","Topspite","Topcompassion"]:
-                node.property2 = json.dumps({
-                'Condition' : info.contents , 
-                })
+        elif info.type == "Condition":
+            if info.contents in ["Asocial", "Ranspite", "Rancompassion", "Topspite", "Topcompassion"]:
+                node.condition = info.contents
             else:
-                node.property3 = json.dumps({
-                'Partnerscore' : info.contents , 
-                })
+                node.Partnerscore = info.contents
 
         if info.type == "Reduction":
             node.score_in_pgg = (int(node.score_in_pgg) - int(info.contents))
-
