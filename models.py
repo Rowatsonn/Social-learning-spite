@@ -28,7 +28,7 @@ class Probe(Node):
 
     @score_in_pgg.setter
     def score_in_pgg(self, val):
-        self.property1 = str(val)
+        self.property1 = int(val)
 
     @condition.setter
     def condition(self, val):
@@ -36,7 +36,7 @@ class Probe(Node):
 
     @Partnerscore.setter
     def Partnerscore(self, val):
-        self.property3 = str(val)
+        self.property3 = int(val)
 
 
 class Pogtwo(Node):
