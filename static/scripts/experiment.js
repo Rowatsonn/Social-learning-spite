@@ -10,7 +10,7 @@ function createAgent () {
     numTransmissions = 0; // Set to 0. Once its 5, move on.
     Score = 0; // Updated throughout and saved as a cookie for later
     advanceExperiment();
-  }
+  })
   .fail(function (rejection) {
     dallinger.allowExit();
     dallinger.error(rejection);
@@ -76,22 +76,19 @@ function processTransmit(transmissions){
     summary = JSON.parse(resp.info.contents);
     pot = summary.total_earnings;
     donation = summary.pog_donation;
-    leftovers = 10 - summary.node_donation;
     totalScore = summary.score_in_pgg;
-    setTimeout(function() {
-      showResults(pot, donation, leftovers, totalScore);
-    }, 2000);
+    showResults(pot, donation, totalScore);
   });
 }
 
 function showResults(pot, donation, leftovers, totalScore){
   Score = Score + (parseInt(pot) + parseInt(leftovers)); 
   $("#Waiting").hide();
-  $("#you").html("You donated: " + myDonation);
+  $("#you").html("You sent: " + myDonation);
   $("#you").show();
-  $("#partner").html("Your partner donated: " + donation);
+  $("#partner").html("The bot returned: " + donation);
   $("#partner").show();
-  $("#earnings").html("This round, you earned: " + (parseInt(pot) + parseInt(leftovers)));
+  $("#earnings").html("You earned: " + pot);
   $("#earnings").show();
   $("#OK").show();
 }
