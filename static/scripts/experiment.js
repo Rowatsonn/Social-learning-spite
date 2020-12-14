@@ -9,14 +9,8 @@ function createAgent () {
     dallinger.storage.set("my_network_id", my_network_id);
     numTransmissions = 0; // Set to 0. Once its 5, move on.
     Score = 0; // Updated throughout and saved as a cookie for later
-    $("#assign").html("Your partner is Participant " + (parseInt(dallinger.identity.participantId) + 3));
-    setTimeout(function(){
-      $("#assign").hide();
-      $("#partnerid").html("Your partner is Participant " + (parseInt(dallinger.identity.participantId) + 3));
-      $("#partnerid").show();
-      advanceExperiment();
-    }, 4000);
-  })
+    advanceExperiment();
+  }
   .fail(function (rejection) {
     dallinger.allowExit();
     dallinger.error(rejection);
