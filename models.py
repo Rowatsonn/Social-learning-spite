@@ -49,14 +49,14 @@ class Pogtwo(Node):
     def update(self, infos):
         """This will handle working out the scores. Infos end up here whenever .receieve()
         is called in the backend"""
-
-        node_donation = int(infos[0].contents)
-        pog_donation = bound(node_donation + random.randint(-3, 4), 0, 12)
-
         node = infos[0].origin
-        node.score_in_pgg = node.score_in_pgg + 10 - node_donation + pog_donation
+        node_donation = int(infos[0].contents)
+        pog_donation = bound(node_donation + random.randint(-2, 6), 0, 12)
+        total_earnings = (10 - node_donation) / 2 + pog_donation
+        node.score_in_pgg = node.score_in_pgg + (10 - node_donation) / 2 + pog_donation
 
         summary = {
+            'total_earnings': total_earnings,
             'pog_donation': pog_donation,
             'node_donation': node_donation,
             'score_in_pgg': node.score_in_pgg
