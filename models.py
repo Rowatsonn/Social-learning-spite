@@ -51,14 +51,12 @@ class Pogtwo(Node):
         is called in the backend"""
 
         node_donation = int(infos[0].contents)
-        pog_donation = bound(node_donation + random.randint(-4, 4), 0, 10)
-        total_earnings = round((pog_donation + node_donation) * 0.75, 0)
+        pog_donation = bound(node_donation + random.randint(-3, 4), 0, 12)
 
         node = infos[0].origin
-        node.score_in_pgg = node.score_in_pgg + 10 - node_donation + total_earnings
+        node.score_in_pgg = node.score_in_pgg + 10 - node_donation + pog_donation
 
         summary = {
-            'total_earnings': total_earnings,
             'pog_donation': pog_donation,
             'node_donation': node_donation,
             'score_in_pgg': node.score_in_pgg
