@@ -9,6 +9,7 @@ function createAgent () {
     dallinger.storage.set("my_network_id", my_network_id);
     numTransmissions = 0; // Set to 0. Once its 5, move on.
     Score = 0; // Updated throughout and saved as a cookie for later
+    scoreShown = 0; // Determines whether advanceExperiment shows the score or advances at the end of the game
     advanceExperiment();
   })
   .fail(function (rejection) {
@@ -103,9 +104,19 @@ function advanceExperiment() {
     $("#PGGrow").show();
     $("#Submitbutton").show(); 
   } else {
-    dallinger.storage.set("Score", Score);
-    dallinger.goToPage('instructions/Interim');
+    if(scoreShown = 0){
+      dallinger.storage.set("Score", Score);
+      showScore();
+    } else {
+      dallinger.goToPage('instructions/Interim');
+    }  
   }
+}
+
+function showScore(){
+  $("#OK").show();
+  $("#earnings").html("Your total score is: " + Score);
+  scoreShown = 1;
 }
 
 // Interim page code
