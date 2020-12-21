@@ -51,7 +51,7 @@ class Pogtwo(Node):
         is called in the backend"""
         node = infos[0].origin
         node_donation = int(infos[0].contents)
-        pog_donation = bound(node_donation + random.randint(-3, 3), 0, 12)
+        pog_donation = bound(node_donation + random.randint(-2, 5), 0, 12)
         total_earnings = (10 - node_donation) / 2 + pog_donation
         node.score_in_pgg = node.score_in_pgg + (10 - node_donation) / 2 + pog_donation
 
