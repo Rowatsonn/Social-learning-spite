@@ -78,12 +78,12 @@ function processTransmit(transmissions){
     pot = summary.total_earnings;
     donation = summary.pog_donation;
     totalScore = summary.score_in_pgg;
-    showResults(pot, donation, totalScore);
+    showResults(pot, donation);
   });
 }
 
-function showResults(pot, donation, leftovers, totalScore){
-  Score = Score + (parseInt(pot) + parseInt(leftovers)); 
+function showResults(pot, donation){
+  Score = Score + parseInt(pot); 
   $("#Waiting").hide();
   $("#you").html("You sent: " + myDonation);
   $("#you").show();
@@ -104,7 +104,7 @@ function advanceExperiment() {
     $("#PGGrow").show();
     $("#Submitbutton").show(); 
   } else {
-    if(scoreShown = 0){
+    if(scoreShown == 0){
       dallinger.storage.set("Score", Score);
       showScore();
     } else {
@@ -116,6 +116,7 @@ function advanceExperiment() {
 function showScore(){
   $("#OK").show();
   $("#earnings").html("Your total score is: " + Score);
+  $("#earnings").show();
   scoreShown = 1;
 }
 
