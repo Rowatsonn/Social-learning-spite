@@ -148,7 +148,7 @@ function changePartners() {
 
 // Spite page code
 function randomiseScore(){
-  num = Math.floor((Math.random() * 80) + 40);
+  num = Math.floor((Math.random() * 65) + 25);
   dallinger.createInfo(my_node_id, {
     contents: num,
     info_type: 'Condition'
