@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <div class="main_div text-center">
-    <div class = "container">
+  <div class = "container">
       <div class = "row">
          <div class = "col-md-12 text-center">
             <h1>Part Two</h1>
@@ -10,14 +9,16 @@
       </div>
       <div class = "row" id = "Partner">
          <div class = "col-md-12 text-center">
-            <h1>Randomly assigning partners, please wait a moment....</h1>
+            <h1>Allocating partners, please wait a moment....</h1>
          </div>
       </div>
       <div class = "row" id = Instructions style = "display:none;">
          <div class = "col-md-12 text-center">
-            <p>In this part of the game, you will be playing with a <strong>real participant</strong>.</p>
-            <p>You will have the chance to reduce your partners score at a small cost to yourself.</p> 
-            <p>Note that once your decision has been made, the game is over and your partner will <strong>not</strong> be able to reduce your earnings in response. </p>
+            <hr>
+            <p>You are now playing with a <strong>real participant</strong>.</p>
+            <p>In this part of the game, you will have the chance to reduce your partners score at a small cost to yourself.</p>
+            <p>Once you make your decision, the game is over. Your partner will <strong>not</strong> be able to reduce your earnings in response. </p>
+            <hr>
          </div>
       </div>  
       <div class="row" id = "Next" style = "display:none;">
@@ -27,7 +28,6 @@
          </div>
       </div>
    </div>
-  </div>
 {% endblock %}
 
 {% block scripts %}
