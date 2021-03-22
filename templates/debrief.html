@@ -11,21 +11,21 @@
          <div class = "col-md-12 text-center">
             <hr>
 
-            <p>Thank you for taking part in this study. Before continuing, please read the following information carefully.</p>
+            <p>Thank you for taking part in this study. Please read the following information carefully.</p>
 
-            <p>You were misled about the nature of the experiment, which is explained below. If you decide you would now like to withdraw from the study, please submit the HIT then contact the lead researcher (robin.o.watson@durham.ac.uk) who will arrange for your data to be destroyed.</</p>
+            <p>You have been misled about the nature of the experiment. In part two, you were told you were playing with other participants. This was not the case; you were playing with a bot throughout the experiment. Your decisions never impacted any other participant and any information presented to you about other participants was made up. The true aim of this study was to understand the evolution of antisocial behaviour.</p>
 
-            <p>In part two, you were told you were playing with other participants. This was not the case. At every stage, you were playing the experiment alone. Your decisions never impacted any other participant. Any information displayed about other participants was also fake.</</p>
-
-            <p>This study’s true aims were to broadly understand the evolution of antisocial behaviour and how this might be influenced by social learning. This is done by measuring antisocial behaviour in part two. The deception was necessary to ensure the validity of the experiment.</p>
+            <p>If you would now like to withdraw from the study, please click “Remove my data” to return the HIT and have your data destroyed. Otherwise, simply press continue to complete the study.</p> 
 
             <hr>
          </div>
       </div>  
       <div class="row">
-         <div class="col-md-10"></div>
          <div class="col-md-2">
-            <button type="button" class="btn btn-success btn-lg" onClick="dallinger.allowExit(); dallinger.goToPage('survey')">Next</button>
+            <button type = "button" class = "btn btn-success btn-lg" onClick="self.close();">Remove my data</button>
+         <div class="col-md-8"></div>
+         <div class="col-md-2">
+            <button type="button" class="btn btn-success btn-lg" onClick="dallinger.allowExit(); dallinger.goToPage('survey')">Continue</button>
          </div>
       </div>
    </div>

@@ -53,7 +53,7 @@ class Spite(Experiment):
     def bonus(self, participant):
         """Calculate a participants bonus."""
         node = participant.nodes()[0]
-        return min(round(node.score_in_pgg * 0.005, 2), 1.00)  # Each point is worth 0.005 cents. Maximum of 1 dollar can be earned
+        return min(round(node.score_in_pgg * 0.0075, 2), 1.00)  # Each point is worth 0.005 cents. Maximum of 1 dollar can be earned
 
     def info_post_request(self, node, info):
         """Depending on the info type, different things will happen here."""
