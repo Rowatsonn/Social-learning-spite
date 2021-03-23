@@ -80,3 +80,8 @@ class Condition(Info):
     """Info submitted when the participant generates their experimental condition"""
 
     __mapper_args__ = {"polymorphic_identity": "Condition"}
+
+class Drop(Info):
+    """Info created when a participant decides they wish to drop out"""
+
+    __mapper_args__ = {"polymorphic_identity": "Drop"}
