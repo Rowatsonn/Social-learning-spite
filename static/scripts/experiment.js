@@ -214,5 +214,12 @@ function updatePoints(value) {
   $("#YourScore").html(yourScore - value);
 }
 
-
-
+function removeMe(){
+  // Removes participants from the experiment
+  allinger.createInfo(my_node_id, {
+    contents: response,
+    info_type: Drop
+  }).done(function(resp){
+    self.close();
+  })
+}
